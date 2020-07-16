@@ -3,6 +3,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import api_view, permission_classes
 from django.contrib.auth.models import User
 from .serializers import UserSerializer, RegisterUserSerializer
+from django.shortcuts import get_object_or_404
 
 # Create your views here.
 
@@ -11,6 +12,13 @@ from .serializers import UserSerializer, RegisterUserSerializer
 def get_users(request):
     queryset = User.objects.all()
     serializer = UserSerializer(queryset, many=True)
+    return Response(serializer.data)
+
+@api_view()
+@permission_classes([IsAuthenticated])
+def get_single_user(request, pk):
+    user = get_object_or_404(User, pk=pk)
+    serializer = UserSerializer(user)
     return Response(serializer.data)
 
 @api_view(['POST'])

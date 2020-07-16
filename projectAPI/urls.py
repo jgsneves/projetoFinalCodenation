@@ -21,6 +21,7 @@ from projectAPI.api import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('users/', views.get_users, name='users_list'),
+    path('users/<int:pk>', views.get_single_user, name='single_user'),
     path('users/register/', views.sign_up_user, name='register_user'),
     path('api-token-auth/', obtain_auth_token, name='api_token_auth'),
 ]
