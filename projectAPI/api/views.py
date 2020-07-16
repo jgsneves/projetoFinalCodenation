@@ -6,7 +6,7 @@ from .models import Report
 from .serializers import UserSerializer, RegisterUserSerializer, ReportSerializer
 from django.shortcuts import get_object_or_404
 
-# Create your views here.
+# Users views #
 
 @api_view()
 @permission_classes([IsAuthenticated])
@@ -34,9 +34,46 @@ def sign_up_user(request):
         data = serializer.errors
     return Response(data)
 
+# Report views #
+
 @api_view()
 @permission_classes([IsAuthenticated])
 def get_reports(request):
     queryset = Report.objects.all()
     serializer = ReportSerializer(queryset, many=True)
     return Response(serializer.data)
+
+@api_view(['GET', 'PUT', 'DELETE'])
+@permission_classes([IsAuthenticated])
+def handle_single_report(request, pk):
+    report = get_object_or_404(Report, pk=pk)
+
+    if request.method == 'GET':
+        serializer = ReportSerializer(report)
+        return Response(serializer.data)
+
+    if request.method == 'PUT':
+        serializer = ReportSerializer(report, data=request.data)
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response({"message": "Report changed"})
+        
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    if request.method == 'DELETE':
+        operation = report.delete()
+
+        if operation:
+            return Response({"message": "Report Deleted"})
+        else:
+            return Response({"message": "Report not deleted"})
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def new_report(request):
+    serializer = ReportSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data)
+    return Response(serializer.errors)

@@ -32,4 +32,6 @@ urlpatterns = [
 
     #report routes
     path('reports/', views.get_reports, name='reports_list'),
+    path('reports/<int:pk>', views.handle_single_report, name='single_report'),
+    path('reports/new', views.new_report, name='create_report'),
 ]
