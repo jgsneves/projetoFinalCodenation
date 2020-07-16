@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
+from .models import Report
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -43,3 +44,18 @@ class RegisterUserSerializer(serializers.ModelSerializer):
         account.set_password(password)
         account.save()
         return account
+
+class ReportSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Report
+        fields = [
+            'id',
+            'log',
+            'title',
+            'details',
+            'type_of',
+            'count_of_events',
+            'coleted_by',
+            'created_at',
+            'archived',
+        ]

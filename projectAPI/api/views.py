@@ -2,7 +2,8 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import api_view, permission_classes
 from django.contrib.auth.models import User
-from .serializers import UserSerializer, RegisterUserSerializer
+from .models import Report
+from .serializers import UserSerializer, RegisterUserSerializer, ReportSerializer
 from django.shortcuts import get_object_or_404
 
 # Create your views here.
@@ -32,3 +33,10 @@ def sign_up_user(request):
     else:
         data = serializer.errors
     return Response(data)
+
+@api_view()
+@permission_classes([IsAuthenticated])
+def get_reports(request):
+    queryset = Report.objects.all()
+    serializer = ReportSerializer(queryset, many=True)
+    return Response(serializer.data)
