@@ -83,6 +83,7 @@ def handle_single_report(request, pk):
 @permission_classes([IsAuthenticated])
 def new_report(request):
     request.data['coleted_by'] = request.user.id
+    request.data['author'] = request.user.username
     serializer = ReportSerializer(data=request.data)
     if serializer.is_valid():
         serializer.save()
