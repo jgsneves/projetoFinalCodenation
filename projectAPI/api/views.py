@@ -51,7 +51,7 @@ class ReportListView(ListAPIView):
     permission_classes = (IsAuthenticated,)
     pagination_class = PageNumberPagination
     filter_backends = (SearchFilter, OrderingFilter)
-    search_fields = ('title', 'details', 'type_of', 'archived', 'coleted_by_name__username')
+    search_fields = ('title', 'details', 'type_of', 'archived')
 
 @api_view(['GET', 'PUT', 'DELETE'])
 @permission_classes([IsAuthenticated])
@@ -82,6 +82,7 @@ def handle_single_report(request, pk):
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def new_report(request):
+    request.data['coleted_by'] = request.user.id
     serializer = ReportSerializer(data=request.data)
     if serializer.is_valid():
         serializer.save()
