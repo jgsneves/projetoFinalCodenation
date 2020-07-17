@@ -16,7 +16,8 @@ urlpatterns = [
     path('api-token-auth/', obtain_auth_token, name='api_token_auth'),
 
     #report routes
-    path('reports/', views.get_reports, name='reports_list'),
+    path('reports/', views.ReportListView.as_view(), name='reports_list'),
+        # OBS: endpoint 'reports/' accepts query param ?page=int 
     path('reports/<int:pk>', views.handle_single_report, name='single_report'),
     path('reports/new', views.new_report, name='create_report'),
 ]
