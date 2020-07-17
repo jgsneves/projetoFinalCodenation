@@ -1,14 +1,17 @@
+from django.contrib.auth.models import User
+from django.shortcuts import get_object_or_404
+
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.generics import ListAPIView
+from rest_framework.filters import SearchFilter, OrderingFilter
 
-from django.contrib.auth.models import User
 from .models import Report
 from .serializers import UserSerializer, RegisterUserSerializer, ReportSerializer
-from django.shortcuts import get_object_or_404
+
 
 # Users views #
 
@@ -47,6 +50,8 @@ class ReportListView(ListAPIView):
     authentication_classes = (TokenAuthentication,)
     permission_classes = (IsAuthenticated,)
     pagination_class = PageNumberPagination
+    filter_backends = (SearchFilter, OrderingFilter)
+    search_fields = ('title', 'details', 'type_of', 'archived', 'coleted_by_name__username')
 
 @api_view(['GET', 'PUT', 'DELETE'])
 @permission_classes([IsAuthenticated])

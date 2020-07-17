@@ -46,6 +46,8 @@ class RegisterUserSerializer(serializers.ModelSerializer):
         return account
 
 class ReportSerializer(serializers.ModelSerializer):
+
+    coleted_by_name = serializers.SerializerMethodField('get_username_from_coleted_by')
     class Meta:
         model = Report
         fields = [
@@ -55,7 +57,11 @@ class ReportSerializer(serializers.ModelSerializer):
             'details',
             'type_of',
             'count_of_events',
-            'coleted_by',
+            'coleted_by_name',
             'created_at',
             'archived',
         ]
+
+    def get_username_from_coleted_by(self, report):
+        coleted_by_name = report.coleted_by.username
+        return coleted_by_name
