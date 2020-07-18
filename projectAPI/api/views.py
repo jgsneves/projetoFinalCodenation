@@ -51,7 +51,7 @@ class ReportListView(ListAPIView):
     permission_classes = (IsAuthenticated,)
     pagination_class = PageNumberPagination
     filter_backends = (SearchFilter, OrderingFilter)
-    search_fields = ('title', 'details', 'type_of', 'archived')
+    search_fields = ('title', 'details', 'type_of', 'archived',)
 
 @api_view(['GET', 'PUT', 'DELETE'])
 @permission_classes([IsAuthenticated])
